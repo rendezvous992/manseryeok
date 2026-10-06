@@ -217,6 +217,30 @@ svg#penta{display:block;width:100%;max-width:340px;margin:0 auto 6px}
 .curli{background:color-mix(in srgb,var(--e1) 8%,transparent);border-radius:6px;padding:2px 4px}
 #starOut h3{margin:18px 0 8px;font-size:1.05rem}
 #starOut details summary{margin-bottom:6px}
+.savedHead{display:flex;justify-content:space-between;align-items:baseline;font-size:.92rem}
+.savedList{display:flex;gap:6px;overflow-x:auto;padding:8px 0 2px}
+.sv{flex:none;display:flex;align-items:center;border:1px solid var(--line);border-radius:999px;background:var(--bg);font-size:.85rem}
+.sv button{font:inherit;background:none;border:0;color:var(--ink);cursor:pointer;padding:7px 4px 7px 12px;white-space:nowrap}
+.sv button small{color:var(--muted);margin-left:5px;font-size:.74rem}
+.sv .del{padding:7px 10px 7px 6px;color:var(--muted)}
+#savedBox[hidden],#installBar[hidden],#installYes[hidden]{display:none}
+.whoRow{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.saveBtn{font:inherit;font-size:.82rem;flex:none;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:999px;padding:6px 12px;cursor:pointer}
+.saveBtn.done{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+#installBar{position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:40;max-width:656px;margin:0 auto;display:flex;align-items:center;gap:8px;background:var(--ink);color:var(--bg);border-radius:12px;padding:10px 10px 10px 14px;box-shadow:0 8px 24px rgba(0,0,0,.25);font-size:.9rem}
+#installBar span{flex:1}
+#installYes{font:inherit;font-weight:700;border:0;border-radius:8px;padding:8px 14px;background:var(--e1);color:#fff;cursor:pointer}
+#installNo{font:inherit;border:0;background:none;color:var(--bg);opacity:.7;padding:6px 8px;cursor:pointer}
+.meBar{display:flex;align-items:center;gap:8px;margin-top:18px;font-size:.88rem;color:var(--muted)}
+.meBar span{flex:1;min-width:0}
+.meBar b{color:var(--ink)}
+.meBtn,.meGo,.meLight{font:inherit;font-size:.84rem;border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:999px;padding:7px 12px;cursor:pointer;white-space:nowrap}
+.meGo{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.mePanel{margin-top:12px}
+.mePanel[hidden],#meGo[hidden],#meDelete[hidden],#meCodeWrap[hidden],#meRestore[hidden],#meLeapWrap[hidden]{display:none}
+.meActions{display:grid;grid-template-columns:2fr 1fr;gap:8px;margin-top:4px}
+.meTools{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.meDanger{color:var(--e1)}
 .gcard{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:14px;margin-top:10px}
 .gtop{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
 .gname{font-family:"Nanum Myeongjo",serif;font-weight:800;font-size:1.4rem;line-height:1.3}
@@ -335,6 +359,24 @@ button.go:disabled{opacity:.6}
     <p class="lede">태어난 해·달·날·시를 여덟 글자로 세워 음양오행과 대운의 흐름을 풀고, 한자 이름의 풀이와 이름 짓기까지 함께 봅니다.</p>
   </header>
 
+  <div class="meBar"><span id="meHello"></span><button type="button" class="meGo" id="meGo" hidden>내 사주</button><button type="button" class="meBtn" id="meBtn">내 정보 만들기</button></div>
+  <div class="card mePanel" id="mePanel" hidden>
+    <h2 style="margin-bottom:.4em">내 정보</h2>
+    <p class="mut sm" style="margin:0 0 12px">한 번 등록하면 앱을 열 때마다 내 사주가 바로 나오고, 이름 풀이에도 내 이름이 채워집니다. 정보는 이 기기 안에만 저장돼요.</p>
+    <div class="row"><label>아이디(닉네임)<input type="text" id="meNick" maxlength="16" autocomplete="off" placeholder="예: 길동이"></label><label>이름 (한글)<input type="text" id="meName" maxlength="6" autocomplete="off" placeholder="예: 홍길동"></label></div>
+    <label style="margin-top:10px">한자 이름 (선택)<input type="text" id="meHanja" maxlength="6" autocomplete="off" placeholder="예: 洪吉童"></label>
+    <div class="seg" role="radiogroup" aria-label="달력" style="margin-top:12px"><label><input type="radio" name="meCal" value="solar" checked><span>양력</span></label><label><input type="radio" name="meCal" value="lunar"><span>음력</span></label></div>
+    <div class="row3" style="margin-top:10px"><label>년<input type="number" id="meY" min="1901" max="2099" value="1990" inputmode="numeric"></label><label>월<select id="meM"></select></label><label>일<select id="meD"></select></label></div>
+    <label class="check" id="meLeapWrap" hidden style="margin-top:8px"><input type="checkbox" id="meLeap"> 윤달</label>
+    <div class="row" style="margin-top:10px"><label>태어난 시각<input type="time" id="meTime" value="12:00"></label><label>태어난 곳<select id="mePlace"></select></label></div>
+    <label class="check" style="margin-top:8px"><input type="checkbox" id="meNoTime"> 태어난 시각을 몰라요</label>
+    <div class="seg" role="radiogroup" aria-label="성별" style="margin-top:10px"><label><input type="radio" name="meSex" value="M" checked><span>남</span></label><label><input type="radio" name="meSex" value="F"><span>여</span></label></div>
+    <p class="err" id="meMsg" style="margin-top:10px;color:var(--muted)"></p>
+    <div class="meActions"><button type="button" class="go" id="meSave">저장하기</button><button type="button" class="meLight" id="meCancel">닫기</button></div>
+    <div class="meTools"><button type="button" class="meLight" id="meBackup">백업 코드 만들기</button><button type="button" class="meLight" id="meRestoreBtn">백업 코드로 복원</button><button type="button" class="meLight meDanger" id="meDelete" hidden>내 정보 삭제</button></div>
+    <div id="meCodeWrap" hidden><textarea id="meCode" rows="3" style="width:100%;margin-top:8px;font-size:.8rem"></textarea><button type="button" class="meLight" id="meRestore" hidden style="margin-top:6px">복원하기</button></div>
+    <p class="mut sm" style="margin:10px 0 0">다른 폰으로 옮기거나 브라우저 기록을 지우기 전에는 백업 코드를 만들어 두세요. 백업 코드에는 생년월일이 담겨 있으니 다른 사람과 공유하지 마세요.</p>
+  </div>
   <nav class="maintabs" role="tablist">
     <button role="tab" aria-selected="true" data-p="saju">사주 풀이</button>
     <button role="tab" aria-selected="false" data-p="star">자미·점성</button>
@@ -343,6 +385,7 @@ button.go:disabled{opacity:.6}
   </nav>
   <div id="panel-saju">
   <form id="f" class="card" novalidate>
+    <div id="savedBox" hidden><div class="savedHead"><b>저장된 사주</b><span class="mut sm">눌러서 바로 보기</span></div><div class="savedList" id="savedList"></div></div>
     <label>이름 (선택)<input type="text" id="name" maxlength="20" autocomplete="off" placeholder="예: 홍길동"></label>
     <div class="seg" role="radiogroup" aria-label="달력">
       <label><input type="radio" name="cal" value="solar" checked><span>양력</span></label>
@@ -390,7 +433,7 @@ button.go:disabled{opacity:.6}
 
   <div id="result" hidden aria-live="polite">
     <div class="card">
-      <p class="who" id="who"></p>
+      <div class="whoRow"><p class="who" id="who"></p><button type="button" class="saveBtn" id="saveBtn">☆ 저장</button></div>
       <dl class="dates" id="dates"></dl>
     </div>
 
@@ -457,6 +500,7 @@ button.go:disabled{opacity:.6}
   </div>
 
   <div id="tip" role="tooltip" hidden></div>
+  <div id="installBar" hidden><span id="installMsg">만세력을 앱으로 설치할까요?</span><button type="button" id="installYes">설치</button><button type="button" id="installNo" aria-label="닫기">✕</button></div>
 
   <div class="note">
     <p>년주와 월주는 황경으로 계산한 절기 시각을, 음력은 삭(합삭)과 중기를 직접 계산한 한국 기준 음력을 씁니다. 절기 시각에는 몇 분 정도 오차가 있을 수 있으니 절입 시각 근처에 태어났다면 만세력과 대조해 보세요.</p>
@@ -1059,7 +1103,7 @@ function render(r,inp){
   $('result').hidden=false;
   LAST={r,inp};
   document.querySelectorAll('.luck-scroll').forEach(el=>{const n=el.querySelector('.now');if(n)el.scrollLeft+=n.getBoundingClientRect().left-el.getBoundingClientRect().left-el.clientWidth/2+27;});
-  $('result').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
+  if(!window.__noScroll)$('result').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
 }
 
 /* ===== 폼 ===== */
@@ -2308,6 +2352,102 @@ async function renderStar(){
 }
 document.addEventListener('click',e=>{if(e.target.id==='goSaju')document.querySelector('.maintabs [data-p=saju]').click();});
 document.querySelectorAll('input[name=smode]').forEach(x=>x.addEventListener('change',()=>{starMode=document.querySelector('input[name=smode]:checked').value;renderStar();}));
+
+/* ===== 저장된 사주 ===== */
+const SKEY='manseryeok_profiles';
+const store={get(){try{return JSON.parse(localStorage.getItem(SKEY)||'[]');}catch(e){return [];}},set(v){try{localStorage.setItem(SKEY,JSON.stringify(v));return true;}catch(e){return false;}}};
+function formState(){return {name:$('name').value.trim(),cal:document.querySelector('input[name=cal]:checked').value,y:$('yy').value,m:mmSel.value,d:ddSel.value,leap:$('leap').checked,time:$('time').value,noTime:$('notime').checked,sex:document.querySelector('input[name=sex]:checked').value,place:$('place').value,corr:$('corr').value,zi:$('zi').value};}
+function applyState(p){
+  $('name').value=p.name||'';
+  document.querySelector(`input[name=cal][value=${p.cal}]`).checked=true;$('leapWrap').hidden=p.cal!=='lunar';$('leap').checked=!!p.leap;
+  $('yy').value=p.y;mmSel.value=p.m;fillDays();ddSel.value=p.d;
+  $('notime').checked=!!p.noTime;$('time').disabled=!!p.noTime;if(p.time)$('time').value=p.time;
+  document.querySelector(`input[name=sex][value=${p.sex}]`).checked=true;$('place').value=p.place;$('corr').value=p.corr;$('zi').value=p.zi;}
+const keyOf=p=>[p.name,p.cal,p.y,p.m,p.d,p.leap,p.noTime?'':p.time,p.sex].join('|');
+function renderSaved(){
+  const list=store.get();$('savedBox').hidden=!list.length;
+  $('savedList').innerHTML=list.map((p,i)=>`<span class="sv"><button type="button" data-load="${i}">${(p.name||'이름 없음').replace(/[<>&"]/g,'')}<small>${p.y}.${p.m}.${p.d}${p.cal==='lunar'?'(음)':''}</small></button><button type="button" class="del" data-del="${i}" aria-label="삭제">✕</button></span>`).join('');
+  const cur=keyOf(formState()),done=list.some(p=>keyOf(p)===cur);$('saveBtn').classList.toggle('done',done);$('saveBtn').textContent=done?'★ 저장됨':'☆ 저장';}
+$('saveBtn').addEventListener('click',()=>{
+  const st=formState(),list=store.get(),k=keyOf(st),i=list.findIndex(p=>keyOf(p)===k);
+  if(i>=0){list.splice(i,1);}else{list.unshift(st);if(list.length>30)list.length=30;}
+  if(!store.set(list)){alert('이 환경에서는 저장할 수 없어요.');return;}renderSaved();});
+$('savedList').addEventListener('click',e=>{
+  const l=e.target.closest('[data-load]'),d=e.target.closest('[data-del]');
+  if(d){const list=store.get();const p=list[+d.dataset.del];if(p&&confirm(`‘${p.name||'이름 없음'}’ 사주를 삭제할까요?`)){list.splice(+d.dataset.del,1);store.set(list);renderSaved();}return;}
+  if(l){applyState(store.get()[+l.dataset.load]);$('f').requestSubmit?$('f').requestSubmit():$('f').dispatchEvent(new Event('submit',{cancelable:true}));}});
+$('f').addEventListener('submit',()=>setTimeout(renderSaved,0));
+renderSaved();
+
+/* ===== 앱 설치 안내 ===== */
+(function(){
+  const top=(()=>{try{return window.top===window.self;}catch(e){return false;}})();
+  const standalone=(window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone;
+  if(!top||standalone)return;
+  let dismissed=false;try{dismissed=+localStorage.getItem('manseryeok_install_dismiss')>Date.now();}catch(e){}
+  if(dismissed)return;
+  let deferred=null;const bar=$('installBar');
+  const hide=days=>{bar.hidden=true;if(days)try{localStorage.setItem('manseryeok_install_dismiss',Date.now()+days*864e5);}catch(e){}};
+  window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferred=e;$('installMsg').textContent='만세력을 앱으로 설치할까요?';$('installYes').hidden=false;bar.hidden=false;});
+  $('installYes').addEventListener('click',async()=>{if(!deferred)return;deferred.prompt();try{await deferred.userChoice;}catch(e){}deferred=null;hide(0);});
+  $('installNo').addEventListener('click',()=>hide(7));
+  window.addEventListener('appinstalled',()=>hide(0));
+  if(/iphone|ipad|ipod/i.test(navigator.userAgent)){$('installMsg').textContent='공유 버튼 → "홈 화면에 추가"로 앱처럼 설치할 수 있어요.';$('installYes').hidden=true;bar.hidden=false;}
+})();
+
+/* ===== 내 정보 ===== */
+const MEKEY='manseryeok_me';
+const meStore={get(){try{return JSON.parse(localStorage.getItem(MEKEY)||'null');}catch(e){return null;}},set(v){try{v?localStorage.setItem(MEKEY,JSON.stringify(v)):localStorage.removeItem(MEKEY);return true;}catch(e){return false;}}};
+(function initMeForm(){
+  const ms=$('meM'),pl=$('mePlace');for(let i=1;i<=12;i++)ms.add(new Option(i+'월',i));
+  [...$('place').options].forEach(o=>pl.add(new Option(o.text,o.value)));
+  $('meM').addEventListener('change',meDays);$('meY').addEventListener('change',meDays);
+  document.querySelectorAll('input[name=meCal]').forEach(r=>r.addEventListener('change',()=>{$('meLeapWrap').hidden=document.querySelector('input[name=meCal]:checked').value!=='lunar';meDays();}));
+  $('meNoTime').addEventListener('change',e=>{$('meTime').disabled=e.target.checked;});
+  meDays();
+})();
+function meDays(){const lunar=document.querySelector('input[name=meCal]:checked').value==='lunar';const y=+$('meY').value||2000,m=+$('meM').value||1;
+  const max=lunar?30:new Date(Date.UTC(y,m,0)).getUTCDate();const cur=+$('meD').value||1;$('meD').innerHTML='';for(let i=1;i<=max;i++)$('meD').add(new Option(i+'일',i));$('meD').value=Math.min(cur,max);}
+function meFill(me){
+  $('meNick').value=me?me.nick||'':'';$('meName').value=me?me.name||'':'';$('meHanja').value=me?me.hanja||'':'';
+  document.querySelector(`input[name=meCal][value=${me?me.cal:'solar'}]`).checked=true;$('meLeapWrap').hidden=!me||me.cal!=='lunar';$('meLeap').checked=!!(me&&me.leap);
+  $('meY').value=me?me.y:'1990';$('meM').value=me?me.m:'1';meDays();$('meD').value=me?me.d:'1';
+  $('meNoTime').checked=!!(me&&me.noTime);$('meTime').disabled=!!(me&&me.noTime);$('meTime').value=me&&me.time?me.time:'12:00';
+  document.querySelector(`input[name=meSex][value=${me?me.sex:'M'}]`).checked=true;$('mePlace').value=me?me.place:'126.98';}
+function meToState(me){return {name:me.name||me.nick||'',cal:me.cal,y:me.y,m:me.m,d:me.d,leap:me.leap,time:me.time,noTime:me.noTime,sex:me.sex,place:me.place,corr:'lon',zi:'23'};}
+function meApplyEverywhere(me,show){
+  applyState(meToState(me));
+  if(me.name){$('nname').value=me.name;$('nhanja').value=me.hanja||'';buildPickers();}
+  if(me.name&&me.name.length>=2){$('gsur').value=me.name[0];$('gsur').dispatchEvent(new Event('input'));}
+  window.__noScroll=!show;$('f').requestSubmit?$('f').requestSubmit():$('f').dispatchEvent(new Event('submit',{cancelable:true}));window.__noScroll=false;
+}
+function renderMeBar(){const me=meStore.get();
+  $('meHello').innerHTML=me?`<b>${(me.nick||me.name||'나').replace(/[<>&]/g,'')}</b>님의 만세력 · ${me.y}.${me.m}.${me.d}${me.cal==='lunar'?'(음)':''}`:'내 정보를 등록하면 열 때마다 내 사주가 바로 나와요';
+  $('meGo').hidden=!me;$('meBtn').textContent=me?'내 정보':'내 정보 만들기';}
+$('meBtn').addEventListener('click',()=>{const open=$('mePanel').hidden;$('mePanel').hidden=!open;if(open){meFill(meStore.get());$('meDelete').hidden=!meStore.get();$('meMsg').textContent='';}});
+$('meCancel').addEventListener('click',()=>{$('mePanel').hidden=true;});
+$('meGo').addEventListener('click',()=>{const me=meStore.get();if(!me)return;document.querySelector('.maintabs [data-p=saju]').click();meApplyEverywhere(me,true);});
+$('meSave').addEventListener('click',()=>{
+  const nick=$('meNick').value.trim(),name=$('meName').value.trim().replace(/\s/g,''),hanja=$('meHanja').value.trim().replace(/\s/g,'');
+  if(!nick&&!name){$('meMsg').textContent='아이디(닉네임)나 이름 중 하나는 넣어 주세요.';return;}
+  const y=+$('meY').value;if(!(y>=1901&&y<=2099)){$('meMsg').textContent='태어난 해를 1901~2099 사이로 넣어 주세요.';return;}
+  if(hanja&&name&&[...hanja].length!==[...name].length){$('meMsg').textContent='한자 이름은 한글 이름과 글자 수를 맞춰 주세요.';return;}
+  const me={nick,name,hanja,cal:document.querySelector('input[name=meCal]:checked').value,y:String(y),m:$('meM').value,d:$('meD').value,leap:$('meLeap').checked,time:$('meTime').value,noTime:$('meNoTime').checked,sex:document.querySelector('input[name=meSex]:checked').value,place:$('mePlace').value};
+  if(!meStore.set(me)){$('meMsg').textContent='이 환경에서는 저장할 수 없어요.';return;}
+  $('mePanel').hidden=true;renderMeBar();document.querySelector('.maintabs [data-p=saju]').click();meApplyEverywhere(me,true);});
+$('meDelete').addEventListener('click',()=>{if(!confirm('내 정보를 삭제할까요? 저장된 다른 사주는 그대로 남습니다.'))return;meStore.set(null);$('mePanel').hidden=true;renderMeBar();});
+$('meBackup').addEventListener('click',async()=>{
+  const data={v:1,me:meStore.get(),profiles:store.get()};const code='MSR1:'+btoa(unescape(encodeURIComponent(JSON.stringify(data))));
+  $('meCode').value=code;$('meCodeWrap').hidden=false;
+  try{await navigator.clipboard.writeText(code);$('meMsg').textContent='백업 코드를 복사했어요. 다른 기기에서 ‘백업 코드로 복원’에 붙여 넣으세요.';}catch(e){$('meMsg').textContent='아래 코드를 길게 눌러 복사해 주세요.';$('meCode').select();}});
+$('meRestoreBtn').addEventListener('click',()=>{$('meCodeWrap').hidden=false;$('meCode').value='';$('meCode').focus();$('meMsg').textContent='백업 코드를 붙여 넣고 ‘복원하기’를 누르세요.';$('meRestore').hidden=false;});
+$('meRestore').addEventListener('click',()=>{
+  try{const c=$('meCode').value.trim();if(!c.startsWith('MSR1:'))throw 0;const data=JSON.parse(decodeURIComponent(escape(atob(c.slice(5)))));
+    if(data.me)meStore.set(data.me);if(Array.isArray(data.profiles)){const cur=store.get();const keys=new Set(cur.map(keyOf));data.profiles.forEach(p=>{if(!keys.has(keyOf(p)))cur.push(p);});store.set(cur.slice(0,30));}
+    renderSaved();renderMeBar();$('mePanel').hidden=true;if(data.me)meApplyEverywhere(data.me,true);}
+  catch(e){$('meMsg').textContent='백업 코드가 올바르지 않아요. 처음부터 끝까지 다시 붙여 넣어 주세요.';}});
+renderMeBar();
+{const me=meStore.get();if(me)setTimeout(()=>meApplyEverywhere(me,false),0);}
 
 if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));}
 </script>
